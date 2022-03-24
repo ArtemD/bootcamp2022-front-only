@@ -1,1 +1,29 @@
-hello world!
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simples :)</title>
+</head>
+
+<body>
+    <script>
+        let headersList = {
+            "Accept": "*/*",
+            "User-Agent": "Thunder Client (https://www.thunderclient.com)"
+        }
+
+        fetch("https://api.spoonacular.com/recipes/complexSearch?apiKey=de9eefef5b62421fbc904960928291be&equipment=pan", {
+            method: "GET",
+            headers: headersList
+        }).then(function (response) {
+            return response.text();
+        }).then(function (data) {
+            console.log(data);
+        })    
+    </script>
+</body>
+
+</html>
