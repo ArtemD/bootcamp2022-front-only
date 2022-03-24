@@ -22,9 +22,9 @@
             return response.text();
         }).then(function (data) {
             
-            data.forEach(element => {
-                print(element['title']);
-            });
+            for (var row in data){
+                print(row['title']);
+            }
         })    
     </script>
 </body>
