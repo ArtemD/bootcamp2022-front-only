@@ -5,27 +5,76 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Simples :)</title>
+    <title>Find your recipes</title>
+    <link rel="stylesheet" href="//unpkg.com/primitive-ui/dist/css/main.css">
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <style>
+        body {
+            margin-left: 30px;
+            margin-right: 30px;
+        }
+    </style>
 </head>
 
 <body>
-    <script>
-        let headersList = {
-            "Accept": "*/*",
-            "User-Agent": "Thunder Client (https://www.thunderclient.com)"
-        }
+    <h1>Find your recipes</h1>
 
-        fetch("https://api.spoonacular.com/recipes/complexSearch?apiKey=de9eefef5b62421fbc904960928291be&equipment=pan", {
-            method: "GET",
-            headers: headersList
-        }).then(function (response) {
-            return response.text();
-        }).then(function (data) {
-            
-            for (var row in data['results']){
-                document.write(row['title']+"<br>");
+    <input type="text" id="search" placeholder="Search for a recipe"> <button id="q">Search</button>
+
+    <div id="results">
+    </div>
+
+    <script>
+
+        $(document).ready(function () {
+
+            function get_recipes(query) {
+                let headersList = {
+                    "Accept": "*/*"
+                }
+
+                return fetch("https://api.spoonacular.com/recipes/complexSearch?apiKey=de9eefef5b62421fbc904960928291be&query=" + query, {
+                    method: "GET",
+                    headers: headersList
+                }).then(function (response) {
+                    return response.text();
+                }).then(function (data) {
+
+                    let recipes = JSON.parse(data);
+                    recipes = recipes.results;
+
+                    output = "";
+                    
+                    for (var r in recipes){
+                        output = output + '<b>' + recipes[r].title + '</b><br/>';
+                        output = output + '<img src="' + recipes[r].image + '"><hr>';
+
+                    }
+
+                    $("#results").html(output);
+                    
+                })
             }
-        })    
+
+            $("#search").bind("enterKey", function (e) {
+                get_recipes($("#search").val());
+            });
+            $("#search").keyup(function (e) {
+                if (e.keyCode == 13) {
+                    $("#search").trigger("enterKey");
+                }
+            });
+
+            $("#q").click(function(){
+                query = $("#search").val();
+                data = get_recipes(query);
+
+            })
+        
+
+        });
+
+
     </script>
 </body>
 
